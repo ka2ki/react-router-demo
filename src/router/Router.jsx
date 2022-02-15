@@ -1,0 +1,39 @@
+import { Switch, Route } from "react-router-dom";
+import { Home } from "../Home";
+import { Page2 } from "../Page2";
+import { Page1Routes } from "./Page1Routes";
+
+export const Router = () => {
+  return (
+    <Switch>
+      <Route exact path="/">
+        <Home />
+      </Route>
+      <Route
+        path="/page1"
+        /** 引数でpropsをデフォルトで受け取ってくれている
+         * props.match.url
+         */
+        render={({ match: { url } }) => (
+          /** /page1配下のルーティングの設定を配列で切り出す
+           * Page1Routes.jsx
+           */
+          <Switch>
+            {Page1Routes.map((route) => (
+              <Route
+                key={route.path}
+                exact={route.exact}
+                path={`${url}${route.path}`}
+              >
+                {route.children}
+              </Route>
+            ))}
+          </Switch>
+        )}
+      ></Route>
+      <Route path="/page2">
+        <Page2 />
+      </Route>
+    </Switch>
+  );
+};
